@@ -12,7 +12,7 @@ function findSpot(spot) {
     }
 }
 
-console.log(findSpot(board[0][1]));
+//console.log(findSpot(board[0][1]));
 //cycle through two arrays and compare?
 function threeInARow(array) {
 
@@ -35,11 +35,19 @@ arrayB = [
     [0, "x", 0],
     [0, 0, "x"]
 ];
-if (arrayA === arrayB) {
-    console.log("array a and b are equal");
-} else {
-    console.log("not equal");
+
+
+function arraysAreIdentical(arr1, arr2) {
+    for (var i = 0; i < arr1.length; i++) {
+        for (var v = 0; v < arr1[i][v].length; v++) {
+            if (arr1[i][v] !== arr2[i][v]) {
+                return false;
+            }
+        }
+    }
+    return true;
 }
+console.log(arraysAreIdentical(arrayA, arrayB));
 /* 
 Winning Combos
 board = [[x, 0, 0],[0, x, 0],[0, 0, x]];
