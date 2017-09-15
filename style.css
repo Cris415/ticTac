@@ -1,0 +1,114 @@
+body {
+  font-family: Helvetica;
+background: #70e1f5;  /* fallback for old browsers */
+background: -webkit-linear-gradient(to right, #ffd194, #70e1f5);  /* Chrome 10-25, Safari 5.1-6 */
+background: linear-gradient(to right, #ffd194, #70e1f5); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+
+}
+.container {
+  margin-top: 7%;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.board {
+  vertical-align: top;
+  overflow: hidden;
+  background-color: #e7e7e7;
+  color: #6BD8EB;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 200%;
+  margin: 4px 2px;
+  width: 10rem;
+  height: 10rem;
+}
+
+.overlay {
+  position: fixed; /* Sit on top of the page content */
+  display: none; /* Hidden by default */
+  width: 100%; /* Full width (cover the whole page) */
+  height: 100%; /* Full height (cover the whole page) */
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5); /* Black background with opacity */
+  z-index: 2; /* Specify a stack order in case you're using a different order for other elements */
+}
+.overlay-item {
+  border-radius: 10px;
+  position: absolute;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  background-color: #555555;
+  color: white;
+  padding: 1rem;
+}
+.overlay-btn {
+  overflow: hidden;
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+}
+.status {
+  padding: 1rem;
+  top: 20%;
+  left: 50%;
+}
+
+.reset {
+  top: 30%;
+  left: 50%;
+}
+
+.choose-dis {
+  top: 30%;
+  left: 50%;
+}
+
+.choose-o {
+  position: absolute;
+  top: 45%;
+  left: 56%;
+}
+
+.choose-x {
+  position: absolute;
+  top: 45%;
+  left: 44%;
+}
+
+.game-board{
+  position: relative;
+}
+
+@media only screen and (max-width: 520px) {
+    .board {
+    vertical-align: top;
+    overflow: hidden;
+    background-color: #e7e7e7;
+    color: #6BD8EB;
+    border: none;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 200%;
+    margin: 4px 2px;
+    width: 7rem;
+    height: 7rem;
+      overflow:hidden;
+  }
+  .game-board{
+    min-width: 4rem;
+    min-height: 4rem;
+/*     overflow-x:auto; 
+    overflow-y:hidden; */
+  }
+}
