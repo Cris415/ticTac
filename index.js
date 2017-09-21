@@ -5,7 +5,7 @@ Tic-Tac-Toe
 */
 
 var game = {
-  // board: [["X", 0, 0], [0, 0, "O"], ["X", "O", "O"]]; //test board
+  // board: [["X", 0, 0], [0, 0, "O"], ["X", "O", "O"]], //test board
   board: [[0, 0, 0], [0, 0, 0], [0, 0, 0]],
   cpu: "X",
   user: "O"
@@ -132,20 +132,26 @@ function moveOnBoard(array, mark, i, v) {
 }
 
 //will return a new board with the computer's move completed
-function computerTurn(arr, mark, userMark) {
+function computerTurn(array, mark, userMark) {
   //returns an object with all the possible moves for one spot.
   function moveGenerator(arr, index, index2, mark) {
-    function moveUp(arr, index, index2, mark) {
+    var left = -1;
+    var right = 1;
+    var up = -1;
+    var down = 1;
+
+    function moveVertical(arr, index, index2, mark, dir) {
       var tempArr = JSON.parse(JSON.stringify(arr));
       var counter = 0;
       var obj = {};
       for (var i = 0; i < arr.length; i++) {
+        debugger;
         if (
-          tempArr[index - i][index2] === 0 ||
-          tempArr[index - i][index2] === mark
+          tempArr[index - i * dir][index2] === 0 ||
+          tempArr[index - i * dir][index2] === mark
         ) {
-          if (tempArr[index - i][index2] !== mark) {
-            tempArr[index - i][index2] = mark;
+          if (tempArr[index - i * dir][index2] !== mark) {
+            tempArr[index - i * dir][index2] = mark;
             counter++;
           }
         } else {
@@ -161,69 +167,17 @@ function computerTurn(arr, mark, userMark) {
       return obj;
     }
 
-    function moveDown(arr, index, index2, mark) {
+    function moveHorizontal(arr, index, index2, mark, dir) {
       var tempArr = JSON.parse(JSON.stringify(arr));
       var counter = 0;
       var obj = {};
       for (var i = 0; i < arr.length; i++) {
         if (
-          tempArr[index + i][index2] === 0 ||
-          tempArr[index + i][index2] === mark
+          tempArr[index][index2 + i * dir] === 0 ||
+          tempArr[index][index2 + i * dir] === mark
         ) {
-          if (tempArr[index + i][index2] !== mark) {
-            tempArr[index + i][index2] = mark;
-            counter++;
-          }
-        } else {
-          return false;
-        }
-      }
-      obj = {
-        index: index,
-        index2: index2,
-        arr: tempArr,
-        counter: counter
-      };
-      return obj;
-    }
-
-    function moveLeft(arr, index, index2, mark) {
-      var tempArr = JSON.parse(JSON.stringify(arr));
-      var counter = 0;
-      var obj = {};
-      for (var i = 0; i < arr.length; i++) {
-        if (
-          tempArr[index][index2 - i] === 0 ||
-          tempArr[index][index2 - i] === mark
-        ) {
-          if (tempArr[index][index2 - i] !== mark) {
-            tempArr[index][index2 - i] = mark;
-            counter++;
-          }
-        } else {
-          return false;
-        }
-      }
-      obj = {
-        index: index,
-        index2: index2,
-        arr: tempArr,
-        counter: counter
-      };
-      return obj;
-    }
-
-    function moveRight(arr, index, index2, mark) {
-      var tempArr = JSON.parse(JSON.stringify(arr));
-      var counter = 0;
-      var obj = {};
-      for (var i = 0; i < arr.length; i++) {
-        if (
-          tempArr[index][index2 + i] === 0 ||
-          tempArr[index][index2 + i] === mark
-        ) {
-          if (tempArr[index][index2 + i] !== mark) {
-            tempArr[index][index2 + i] = mark;
+          if (tempArr[index][index2 + i * dir] !== mark) {
+            tempArr[index][index2 + i * dir] = mark;
             counter++;
           }
         } else {
@@ -348,11 +302,12 @@ function computerTurn(arr, mark, userMark) {
       };
       return obj;
     }
+
     var combos = {};
     switch (index) {
       case 0:
-        if (moveDown(arr, index, index2, mark)) {
-          combos.index = moveDown(arr, index, index2, mark);
+        if (moveVertical(arr, index, index2, mark, down)) {
+          combos.index = moveVertical(arr, index, index2, mark, down);
         }
         break;
       case 1:
@@ -361,16 +316,16 @@ function computerTurn(arr, mark, userMark) {
         }
         break;
       case 2:
-        if (moveUp(arr, index, index2, mark)) {
-          combos.index = moveUp(arr, index, index2, mark);
+        if (moveVertical(arr, index, index2, mark, up)) {
+          combos.index = moveVertical(arr, index, index2, mark, up);
         }
         break;
     }
 
     switch (index2) {
       case 0:
-        if (moveRight(arr, index, index2, mark)) {
-          combos.index2 = moveRight(arr, index, index2, mark);
+        if (moveHorizontal(arr, index, index2, mark, right)) {
+          combos.index2 = moveHorizontal(arr, index, index2, mark, right);
         }
         break;
       case 1:
@@ -379,8 +334,8 @@ function computerTurn(arr, mark, userMark) {
         }
         break;
       case 2:
-        if (moveLeft(arr, index, index2, mark)) {
-          combos.index2 = moveLeft(arr, index, index2, mark);
+        if (moveHorizontal(arr, index, index2, mark, left)) {
+          combos.index2 = moveHorizontal(arr, index, index2, mark, left);
         }
         break;
     }
@@ -507,18 +462,19 @@ function computerTurn(arr, mark, userMark) {
     return bestMove(tempObj);
   }
 
-  var myMove = nextMove(arr, mark);
+  var myMove = nextMove(array, mark);
 
   //Check if computer is going to win
   if (myMove.counter === 1) {
-    return moveOnBoard(arr, mark, myMove.index, myMove.index2);
+    return moveOnBoard(array, mark, myMove.index, myMove.index2);
   }
   //use if statement to check if user is about to win, if so block the win.
-  if (checkUserWin(arr, userMark)) {
-    var myBlockMove = checkUserWin(arr, userMark);
-    return moveOnBoard(arr, mark, myBlockMove.index, myBlockMove.index2);
+  if (checkUserWin(array, userMark)) {
+    var myBlockMove = checkUserWin(array, userMark);
+    return moveOnBoard(array, mark, myBlockMove.index, myBlockMove.index2);
   }
-  return moveOnBoard(arr, mark, myMove.index, myMove.index2);
+
+  return moveOnBoard(array, mark, myMove.index, myMove.index2);
 }
 
 function resetGame() {
@@ -586,9 +542,8 @@ function myTurn(event) {
   //Use the coordinates on array to change the board array
   var newBoard = moveOnBoard(game.board, game.user, coords[0], coords[1]);
   game.board = newBoard;
-  // event.target.disabled = true;
-  // event.target.innerHTML = game.user;
 
+  //Once the move has been made, check for win or tie
   if (victoryCheck(game.board, game.user)) {
     gameStatus.innerHTML = "You Win!";
     parent.removeEventListener("click", myTurn);
@@ -601,10 +556,14 @@ function myTurn(event) {
     resetOn();
     return;
   }
+
+  //Begin the computer's turn if user hasn't won or tie game
   var compBoard = computerTurn(game.board, game.cpu, game.user);
   game.board = compBoard;
+
+  //Once computer has moved, check for win or tie
   if (victoryCheck(game.board, game.cpu)) {
-    gameStatus.innerHTML = "You Lose! branch";
+    gameStatus.innerHTML = "You Lose! BRANCH"; // REMINDER: Delete!
     parent.removeEventListener("click", myTurn);
     resetOn();
     return;
@@ -615,14 +574,13 @@ function myTurn(event) {
     resetOn();
     return;
   }
-  printBoard(game.board);
 }
 
 document.getElementById("choose").addEventListener("click", chooseMark);
 chooseMarkOn();
 
 // computer's turn for debugging.
-// printBoard(board);
+// printBoard(game.board);
 // var board2 = computerTurn(board, cpuMark, opponentMark);
 // board = board2;
-// printBoard(board);
+// printBoard(game.board);
