@@ -1,19 +1,16 @@
 //this is a tic tac toe program, written in js, styled in css, and stuff in html.
 
-var game = {
-    // board: [["X", 0, 0], [0, 0, "O"], ["X", "O", "O"]]; //test board
-    board: [
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0]
-    ],
-    cpuMark: "X",
-    userMark: "O",
-}
+var board = [0, 1, 2, 3, 4, 5, 6, 7, 8];
+// var board = [["X", 0, 0], [0, 0, "O"], ["X", "O", "O"]]; //test board
+var cpu = "X";
+var user = "O";
 
+//HTML elements
 var gameStatus = document.getElementById("status");
 var parent = document.getElementById("gameBoard");
 var resetBtn = document.getElementById("reset");
+
+
 //print the board array in a more readable fashion
 function printBoard(arr) {
     for (var i = 0; i < arr.length; i++) {
@@ -562,12 +559,12 @@ function myTurn(event) {
     }
 
     //Use the coordinates on array to change the board array
-    var newBoard = moveOnBoard(game.board, game.userMark, coord[0], coord[1]);
+    var newBoard = moveOnBoard(game.board, game.user, coord[0], coord[1]);
     game.board = newBoard;
     event.target.disabled = true;
-    event.target.innerHTML = game.userMark;
+    event.target.innerHTML = game.user;
 
-    if (victoryCheck(game.board, game.userMark)) {
+    if (victoryCheck(game.board, game.user)) {
         gameStatus.innerHTML = "You Win!"
         parent.removeEventListener("click", myTurn);
         resetOn();
@@ -579,9 +576,9 @@ function myTurn(event) {
         resetOn();
         return;
     }
-    var compBoard = computerTurn(game.board, game.cpuMark, game.userMark);
+    var compBoard = computerTurn(game.board, game.cpu, game.user);
     game.board = compBoard;
-    if (victoryCheck(game.board, game.cpuMark)) {
+    if (victoryCheck(game.board, game.cpu)) {
         gameStatus.innerHTML = "You Lose!";
         parent.removeEventListener("click", myTurn);
         resetOn();
@@ -599,11 +596,11 @@ function myTurn(event) {
 
 //function allows user to choose btween x and o
 function chooseMark(event) {
-    game.userMark = event.target.id;
-    if (game.userMark === "X") {
-        game.cpuMark = "O";
+    game.user = event.target.id;
+    if (game.user === "X") {
+        game.cpu = "O";
     } else {
-        game.cpuMark = "X";
+        game.cpu = "X";
     }
     //enable the board once player has chosen a mark
     parent.addEventListener("click", myTurn);
