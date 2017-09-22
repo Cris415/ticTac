@@ -145,13 +145,12 @@ function computerTurn(array, mark, userMark) {
       var counter = 0;
       var obj = {};
       for (var i = 0; i < arr.length; i++) {
-        debugger;
         if (
-          tempArr[index - i * dir][index2] === 0 ||
-          tempArr[index - i * dir][index2] === mark
+          tempArr[index + i * dir][index2] === 0 ||
+          tempArr[index + i * dir][index2] === mark
         ) {
-          if (tempArr[index - i * dir][index2] !== mark) {
-            tempArr[index - i * dir][index2] = mark;
+          if (tempArr[index + i * dir][index2] !== mark) {
+            tempArr[index + i * dir][index2] = mark;
             counter++;
           }
         } else {
@@ -303,7 +302,9 @@ function computerTurn(array, mark, userMark) {
       return obj;
     }
 
+    //Object containing possible moves for one spot
     var combos = {};
+
     switch (index) {
       case 0:
         if (moveVertical(arr, index, index2, mark, down)) {
@@ -339,7 +340,8 @@ function computerTurn(array, mark, userMark) {
         }
         break;
     }
-    //testing diagonal combinations
+
+    //Test diagonal combinations
     if ((index === 0 && index2 === 0) || (index === 2 && index2 === 2)) {
       if (diaDown(arr, index, index2, mark)) {
         combos.dia = diaDown(arr, index, index2, mark);
@@ -359,9 +361,10 @@ function computerTurn(array, mark, userMark) {
     return combos;
   }
 
-  //pass an object with moves, returns the one best move. Best = least number of turns to win
+  //Pass an object with moves, returns the one best move. Best is least number of turns to win
   function bestMove(movesObj) {
     var tempObj = {};
+
     for (var prop in movesObj) {
       if (movesObj[prop].counter === 1) {
         tempObj = movesObj[prop];
@@ -373,10 +376,10 @@ function computerTurn(array, mark, userMark) {
     return tempObj;
   }
 
-  //cycle through each open point, and check if the user will win, if the user will win return an object with location/ else return false.
+  //Cycle through each open point, and check if the user will win, if the user will win return an object with location/ else return false.
   function checkUserWin(arr, userMark) {
-    //loop cycles through each open point
     var tempObj = {};
+
     for (var i = 0; i < arr.length; i++) {
       for (var v = 0; v < arr[i].length; v++) {
         if (arr[i][v] === 0) {
@@ -414,6 +417,23 @@ function computerTurn(array, mark, userMark) {
           }
         }
         objCounter++;
+      }
+    }
+
+    //defeat coner trap; delete corner options for computer
+    var corner = [[0, 0, userMark], [0, mark, 0], [userMark, 0, 0]];
+    for (let i = 0; i < arr.length; i++) {
+      for (let v = 0; v < arr[i].length; v++) {
+        if (arr[i][v] !== corner[i][v]) {
+          break;
+        }
+        if (i == 2 && v == 2) {
+          for (let item in tempObj) {
+            if (tempObj[item].index == 2 && tempObj[item].index2 === 2) {
+              delete tempObj[item];
+            }
+          }
+        }
       }
     }
 
