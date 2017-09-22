@@ -60,7 +60,6 @@ function victoryCheck(array, mark) {
         }
         //if it is the last item and loop not broken, declare victory.
         if (v === 2) {
-          //console.log("victory");
           return true;
         }
       }
@@ -583,7 +582,7 @@ function myTurn(event) {
 
   //Once computer has moved, check for win or tie
   if (victoryCheck(game.board, game.cpu)) {
-    gameStatus.innerHTML = "You Lose! BRANCH"; // REMINDER: Delete!
+    gameStatus.innerHTML = "You Lose!";
     parent.removeEventListener("click", myTurn);
     resetOn();
     return;
