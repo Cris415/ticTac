@@ -1,3 +1,3 @@
 # Tic Tac Toe
 
-This is hosted on: [tic-tac2.surge.sh](tic-tac2.surge.sh).
+This is hosted on: [https://tic-tac2.surge.sh](tic-tac2.surge.sh).
